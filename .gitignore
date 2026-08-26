@@ -1,0 +1,16 @@
+# Compiled executables / bytecode
+*.exe
+*.out
+*.class
+
+# Object files
+*.o
+
+# VS Code / Code Runner temp files
+tempCodeRunnerFile*
+*.old
+
+# Common build folders
+build/
+bin/
+obj/
