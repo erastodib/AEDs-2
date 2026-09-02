@@ -5,13 +5,12 @@ public class FIM_flag {
 	public static void main(String[] args){
 
 	String flag = "FIM";
-	String str;
-
 	Scanner scanner = new Scanner(System.in);
 
-	do {
+	String str = scanner.nextLine();
+	while (!stringComp(str, flag)){
 		str = scanner.nextLine();
-	} while (!stringComp(str, flag));
+	}
 
 }
 
