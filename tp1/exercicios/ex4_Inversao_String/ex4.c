@@ -1,7 +1,7 @@
 #include <stdio.h>
 #define BUFFER 64 //Tamanho padrão das Strings utilizadas no programa
 
-int stringComp(char *str, char *flag, int flagLen);
+bool stringComp(char *str, char *flag, int flagLen);
 char *inverteString(char *str, char *inv);
 
 int main(){
@@ -14,7 +14,7 @@ int main(){
 
 	/*Lê uma String e imprime sua String inversa, obtida através de inverteString(), até receber a flag "FIM"*/
 	fgets(str, sizeof(str), stdin);
-	while (stringComp(str, flag, flagLen) != 1){
+	while (!stringComp(str, flag, flagLen)){
 		inverteString(str, inv);
 		printf("%s\n", inv);
 		fgets(str, sizeof(str), stdin);
@@ -46,15 +46,15 @@ char *inverteString(char *str, char *inv){
 	return inv;
 }
 
-int stringComp(char *str, char *flag, int flagLen){
+bool stringComp(char *str, char *flag, int flagLen){
 
 	if (str[flagLen] != '\n' && str[flagLen] != '\0') //Retorna 0 caso str e flag tenham tamanhos diferentes
-		return 0;
+		return false;
 
-	for (int i = 0; i < flagLen; i++){ //Percorre str caractere por caractere e retorna 0 caso algum caractere seja diferente de flag no mesmo índice
+	for (int i = 0; i < flagLen; i++){ //Percorre str caractere por caractere e retorna false caso algum caractere seja diferente de flag no mesmo índice
 		if (str[i] != flag[i])
-			return 0;
+			return false;
 	}
 
-	return 1; //Caso contrário, retorna 1
+	return true; //Caso contrário, retorna true
 }

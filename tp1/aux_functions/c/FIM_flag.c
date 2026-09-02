@@ -1,29 +1,31 @@
 #include <stdio.h>
+#include <stdbool.h>
+#define BUFFER 128
 
-	int stringComp(char *str, char *flag, int len);
+	bool stringComp(char *str, char *flag, int len);
 
 	int main(){
 	
-		char flag[] = {'F', 'I', 'M'};
-		char str[128];
+		char flag[] = "FIM";
+		char str[BUFFER];
 		
-		int len = (sizeof(flag) / sizeof(flag[0]));
+		int len = ((sizeof(flag) / sizeof(flag[0])) - 1);
 
-		do {
-			fgets(str, sizeof(str), stdin);
-		} while (stringComp(str, flag, len) != 1);
+		while (!stringComp(str, flag, len)){
+			fgets(str, BUFFER, stdin);
+		}
 
 	}
 
-	int stringComp(char *str, char *flag, int len){
+	bool stringComp(char *str, char *flag, int len){
 
 		if (str[len] != '\n' && str[len] != '\0')
-			return 0;
+			return false;
 		
 		for (int i = 0; i < len; i++){
 			if (str[i] != flag[i])
-				return 0;
+				return false;
 		}
 
-		return 1;
+		return true;
 	}

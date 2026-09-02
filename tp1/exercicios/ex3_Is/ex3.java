@@ -10,16 +10,17 @@ public class ex3 {
 	public static void main(String[] args){
 
 		String flag = "FIM";
+		String X1, X2, X3, X4;
 		Scanner scanner = new Scanner(System.in);
 
 		String str = scanner.nextLine(); //Lê strings do usuário até receber a flag "FIM"
 		while (!stringComp(str, flag)){
 			str = formatarString(str);
 
-			String X1 = checkVogais(str)? "SIM" : "NAO";
-			String X2 = checkConsoantes(str)? "SIM" : "NAO";
-			String X3 = checkInteiros(str)? "SIM" : "NAO";
-			String X4 = checkReais(str)? "SIM" : "NAO";
+			X1 = checkVogais(str)? "SIM" : "NAO";
+			X2 = checkConsoantes(str)? "SIM" : "NAO";
+			X3 = checkInteiros(str)? "SIM" : "NAO";
+			X4 = checkReais(str)? "SIM" : "NAO";
 
 			System.out.printf("%s %s %s %s\n", X1, X2, X3, X4);
 
