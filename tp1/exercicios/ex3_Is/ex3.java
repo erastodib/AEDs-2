@@ -55,70 +55,80 @@ public class ex3 {
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+	//A função abaixo verifica se a String recebida é composta apenas por vogais
 	static boolean checkVogais(String str){
-		if (str.length() == 0) return false;
+		if (str.length() == 0) return false; //Retorna 'false' se a String estiver vazia
 
-		for (int i = 0; i < str.length(); i++){
-			char ch = str.charAt(i);
+		for (int i = 0; i < str.length(); i++){ //Percorre a string caractere por caractere
+			char ch = str.charAt(i); //Variável auxiliar para evitar a repetição da função charAt()
 			if (ch != 'A' && ch != 'E' && ch != 'I' && ch != 'O' && ch !=  'U')
-				return false;
+				return false; //Retorna 'false' caso não seja uma vogal
 		}
-		return true;
+		return true; //Caso contrário, retorna 'true'
 	}
 
+
+	//A função abaixo verifica se a String recebida é composta apenas por consoantes
 	static boolean checkConsoantes(String str){
-		if (str.length() == 0) return false;
+		if (str.length() == 0) return false; //Retorna 'false' se a String estiver vazia
 
-		for (int i = 0; i < str.length(); i++){	
-			char ch = str.charAt(i);
-			if ((ch < 'A' || ch > 'Z') || 
+		for (int i = 0; i < str.length(); i++){	//Percorre a string caractere por caractere
+			char ch = str.charAt(i); //Variável auxiliar para evitar a repetição da função charAt()
+			if ((ch < 'A' || ch > 'Z') ||
 			(ch  == 'A' || ch == 'E' || ch == 'I' || ch == 'O' || ch == 'U'))
-					return false;
+					return false; //Retorna 'false' se o caractere estiver fora do intervalo (A-Z) ou se for uma vogal
 		}
-		return true;		
+		return true; //Caso contrário, retorna 'true'
 	}
 
-
+	//A função abaixo verifica se a String recebida é composta apenas por números inteiros
 	static boolean checkInteiros(String str){
-		if (str.length() == 0) return false;
+		if (str.length() == 0) return false; //Retorna 'false' se a String estiver vazia
 
-		for (int i = 0; i < str.length(); i++){
+		for (int i = 0; i < str.length(); i++){ //Percorre a string caractere por caractere
 			if (str.charAt(i) < '0' || str.charAt(i) > '9')
-				return false;
+				return false; // Retorna 'false' se o caractere estiver fora do intervalo (0-9)
 		}
 
-		return true;
+		return true; //Caso contrário, retorna 'true'
 	}
+
+
+	/* A função abaixo verifica se a String recebida é composta apenas por números reais.
+	O arquivo pub.out considera 'true' entradas como '.123'; ',123'; '123.'; '123,' e não parece considerar marcadores de milhar. Logo, a função foi implementada simplesmente limitando o caractere (','/'.' a uma única ocorrencia e checando se os outros caracteres são números)*/
 
 	static boolean checkReais(String str){
-		if (str.length() == 0) return false;
-		int contDec = 0;
+		if (str.length() == 0) return false; //Retorna 'false' se a String estiver vazia
+		int contDec = 0; //Contador de marcadores decimais (. ou ,). Para ser um número real válido, a sring só pode ter uma ocorrência de marcador decimal
 
 		for (int i = 0; i < str.length(); i++){
-			char ch = str.charAt(i);
+			char ch = str.charAt(i); //Variável auxiliar para evitar a repetição da função charAt()
 			if (ch == '.' || ch == ',')
-				contDec++;
+				contDec++; //Verifica se a string possui '.' ou ',' e incrementa contDec em 1
 			if (contDec > 1 ||
 			(ch != '.' && ch != ',' && 
 			(ch < '0' || ch > '9')))
-				return false;
+				return false; //Retorna 'false' caso haja mais de um marcador decimal OU se o caractere não estiver no intervalo (0-9) (excluindo . e ,)
 		}
-		return true;
+		return true; //Caso contrário, retorna 'true'
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	static boolean stringComp(String str, String flag){
-		
-		if (str.length() != flag.length())
-			return false;
-	
-		for (int i = 0; i < flag.length(); i++){
-			if (str.charAt(i) != flag.charAt(i))
-				return false;
-		}
+//Essa funcao retorna 'true' caso duas strings sejam iguais e 'false' caso sejam diferentes
+        static boolean stringComp(String str, String flag){
 
-		return true;
-	}
+                if (str.length() != flag.length()) //Caso o tamanho das strings seja diferente, nao faz sentido compará-las caractere a caractere, pois já são automaticamente diferentes
+                        return false;
+
+                for (int i = 0; i < flag.length(); i++){//Caso as strings tenham o mesmo tamanho, esse loop compara caractere a caractere
+                        if (str.charAt(i) != flag.charAt(i))
+                                return false;
+                }
+
+                return true;
+        }
 
 }
