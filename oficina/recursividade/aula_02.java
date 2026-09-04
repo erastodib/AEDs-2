@@ -1,12 +1,12 @@
 import java.util.Scanner;
 
 public class aula_02 {
+		static Scanner scanner = new Scanner(System.in);
 	public static void main(String[] args){
 		
-		Scanner scanner = new Scanner(System.in);
         	//int ini = scanner.nextInt();
                 
-	        System.out.println("n = ");
+	        System.out.print("n = ");
 	        int n = scanner.nextInt();
 	        boolean active = true;
 		
@@ -20,24 +20,24 @@ public class aula_02 {
 		                            "[3] - Somatorio Gauss"
 			);
 
-			char op = scanner.nextChar();
+			char op = scanner.next().charAt(0);
 		
 			switch(op){
 
 			       	case '1':
 				        x = somatorioIterativo(n);
 					System.out.println(x);
+					active = activePrompt();
 					break;
 		          	case '2':
 			                x = somatorioRecursivo(n);
 			                System.out.println(x);
+					active = activePrompt();
 					break;
 			   	case '3':
 			                x = somatorioGauss(n);
 			                System.out.println(x);
-					break;
-			      	case '0':
-                			active = false;
+					active = activePrompt();
 					break;
 		            	default:
 		               	 	System.out.println("Entrada invalida!");
@@ -48,7 +48,11 @@ public class aula_02 {
 	}
 
 	static int somatorioIterativo(int n){
-		return somatorioIterativo(1, n);
+		int soma = 0;
+		for (int i = 0; i <= n; i++)
+			soma += i;
+		return soma;
+
 	}
 
 	static int somatorioRecursivo(int n){
@@ -58,6 +62,25 @@ public class aula_02 {
 
 		return n + somatorioRecursivo(n-1);
 	
+	}
+
+	static int somatorioGauss(int n){
+		if (n <= 0)
+			return 0;
+
+		return n * (n + 1) / 2;
+	}
+
+	static boolean activePrompt(){
+		scanner.skip("\n");	
+		System.out.println("Aperte ENTER para continuar...");
+		scanner.nextLine();
+
+		System.out.println("Deseja realizar uma nova operação? y/N");
+
+		char yn = Character.toLowerCase(scanner.next().charAt(0));
+
+		return yn == 'y';
 	}
 
 /*	
