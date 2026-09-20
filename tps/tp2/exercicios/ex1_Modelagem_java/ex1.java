@@ -1,3 +1,7 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
 public class ex1 {
 
 	static class Data {
@@ -6,7 +10,7 @@ public class ex1 {
 		private int dia;
 
 		//Método que lê a data do CSV, preenche um novo indice do vetor partes sempre que encontra um "-". 
-		public void ler(String dataStr){
+		public void parseData(String dataStr){
 			if (dataStr != null && !dataStr.isEmpty()){
 				String[] partes = dataStr.split("-");
 
@@ -31,15 +35,32 @@ public class ex1 {
 		private float cilindrada;
 		private String transmissao;
 		private String tracao;
-		private float consumo_cidade;
-		private float consumo_estrada;
-		private int co2;
+		private float consumoCidade;
+		private float consumoEstrada;
+		private float co2;
 		private boolean turbo;
-		private Data data_registro;	
+		private Data dataRegistro;	
 		
 
-		public void parseVeiculo(string StrVeiculo){
-			
+		public void parseVeiculo(String strVeiculo){
+			int i = 0;
+			String[] veiculo = strVeiculo.split(",");
+			this.id = Integer.parseInt(veiculo[i++]);
+			this.marca = veiculo[i++];
+			this.modelo = veiculo[i++];
+			this.ano = Integer.parseInt(veiculo[i++]);
+			this.categoria = veiculo[i++];
+			this.combustivel = veiculo[i++];
+			this.cilindros = Integer.parseInt(veiculo[i++]);
+			this.cilindrada = Float.parseFloat(veiculo[i++]);
+			this.transmissao = veiculo[i++];
+			this.tracao = veiculo[i++];
+			this.consumoCidade = Float.parseFloat(veiculo[i++]);
+			this.consumoEstrada = Float.parseFloat(veiculo[i++]);
+			this.co2 = Float.parseFloat(veiculo[i++]);
+			this.turbo = Boolean.parseBoolean(veiculo[i++]);
+			this.dataRegistro = new Data();
+			this.dataRegistro.parseData(veiculo[i]);
 		}
 	
 	}
@@ -47,14 +68,30 @@ public class ex1 {
 	static class LeitorCSV{
 	
 		Veiculo[] lerCSV(String path){
-			Veiculo array[] = new Veiculo[500];
+			Veiculo array[] = new Veiculo[512];
+			int i = 0;
 
-			return array;
+			try {
+				Scanner file = new Scanner(new File(path));
+
+				file.nextLine();
+				while (file.hasNextLine()){
+					String linha = file.nextLine();
+					Veiculo v = new Veiculo();
+					v.parseVeiculo(linha);
+					array[i++] = v;
+				}
+
+				file.close();
+				return array;
+			} catch (FileNotFoundException e){
+				throw new RuntimeException(e);
+			}
 		}
 
 	}
 
-	public static void main(String[] args){
+	public static void main(String[] args) {
 
 	}
 }
