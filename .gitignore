@@ -9,6 +9,9 @@
 tempCodeRunnerFile*
 *.old
 
+# PDF (enunciado)
+*.pdf
+
 # Common build folders
 build/
 bin/

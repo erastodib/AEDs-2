@@ -21,6 +21,10 @@ public class ex1 {
 				}
 			}
 		}
+
+		public String format(){
+			return String.format("%02d/%02d/%04d", dia, mes, ano);
+		}
 	}
 
 	static class Veiculo {
@@ -40,7 +44,23 @@ public class ex1 {
 		private float co2;
 		private boolean turbo;
 		private Data dataRegistro;	
-		
+	
+		//GETTERS
+		public int getId(){return this.id;}
+		public String getMarca(){return this.marca;}
+		public String getModelo(){return this.modelo;}
+		public int getAno(){return this.ano;}	
+		public String getCategoria(){return this.categoria;}
+		public String getCombustivel(){return this.combustivel;}
+		public int getCilindros(){return this.cilindros;}
+		public float getCilindrada(){return this.cilindrada;}
+		public String getTransmissao(){return this.transmissao;}
+		public String getTracao(){return this.tracao;}
+		public float getConsumoCidade(){return this.consumoCidade;}
+		public float getConsumoEstrada(){return this.consumoEstrada;}
+		public float getCo2(){return this.co2;}
+		public boolean getTurbo(){return this.turbo;}
+		public Data getDataRegistro(){return this.dataRegistro;}
 
 		public void parseVeiculo(String strVeiculo){
 			int i = 0;
@@ -62,13 +82,21 @@ public class ex1 {
 			this.dataRegistro = new Data();
 			this.dataRegistro.parseData(veiculo[i]);
 		}
+
+		public String format(){
+			return String.format(
+					
+					"[%d ## %s ## %s ## %d ## %s ## [%s] ## %d ## %f ## %s ## %s ## %f ## %f ## %f ## %b ## %s]",
+				       id, marca, modelo, ano, categoria, combustivel, cilindros, cilindrada, transmissao, tracao, consumoCidade, consumoEstrada, co2, turbo, dataRegistro.format()	
+			);
+		}
 	
 	}
 
 	static class LeitorCSV{
 	
-		Veiculo[] lerCSV(String path){
-			Veiculo array[] = new Veiculo[512];
+		ResultadoCSV lerCSV(String path){
+			Veiculo array[] = new Veiculo[1];
 			int i = 0;
 
 			try {
@@ -79,19 +107,46 @@ public class ex1 {
 					String linha = file.nextLine();
 					Veiculo v = new Veiculo();
 					v.parseVeiculo(linha);
-					array[i++] = v;
+
+					if (i == array.length){
+						Veiculo[] novo = new Veiculo[array.length*2];
+					
+
+						for (int j = 0; j < array.length; j++)
+							novo[j] = array[j];
+
+						array = novo;
+					}
+
+						array[i++] = v;
 				}
 
 				file.close();
-				return array;
+
+				ResultadoCSV resultado = new ResultadoCSV();
+				resultado.array = array;
+				resultado.qtd = i;
+
+				return resultado;
 			} catch (FileNotFoundException e){
 				throw new RuntimeException(e);
 			}
 		}
+	}
 
+	static class ResultadoCSV{
+		Veiculo[] array;
+		int qtd;
 	}
 
 	public static void main(String[] args) {
 
+		LeitorCSV leitor = new LeitorCSV();
+
+		ResultadoCSV veiculos = leitor.lerCSV("/tmp/veiculos.csv");
+
+		for (int i = 0; i < veiculos.qtd; i++)
+			System.out.println(veiculos.array[i].format());
+		
 	}
 }
