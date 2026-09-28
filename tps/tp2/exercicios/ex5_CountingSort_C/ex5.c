@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <strings.h>
+
 #define DEFAULT 128
 
 // CLASSE DATA ===================================================================================
@@ -32,6 +34,7 @@ Data parseData(char *str){
 }
 
 void formatData(Data d, char *buffer){
+
 	sprintf(buffer, "%02d/%02d/%04d", d.dia, d.mes, d.ano);
 }
 
@@ -120,6 +123,7 @@ void formatVeiculo(Veiculo v, char *buffer){
 	strcpy(combustivel, v.combustivel);
 
 	for (int i = 0; combustivel[i] != '\0'; i++){
+
 		if (combustivel[i] == ';')
 			combustivel[i] = ',';
 	}
@@ -144,7 +148,8 @@ void formatVeiculo(Veiculo v, char *buffer){
 		 data
 	);
 }
-//CSV
+
+// CSV ===================================================================================
 
 Veiculo *lerCsv(char *caminhoArquivo, int *n){
 
@@ -170,7 +175,7 @@ Veiculo *lerCsv(char *caminhoArquivo, int *n){
 	while (fgets(linha, sizeof(linha), arquivo) != NULL){
 
 		if (*n == cap){
-			
+
 			cap *= 2;
 
 			array = (Veiculo *)realloc(
@@ -191,30 +196,92 @@ Veiculo *lerCsv(char *caminhoArquivo, int *n){
 	return array;
 }
 
+// COUNTING SORT ===================================================================================
+
+void countingSort(Veiculo *veiculos, int n){
+
+	if (n <= 1)
+		return;
+
+	int maior = veiculos[0].cilindros;
+
+	for (int i = 1; i < n; i++){
+
+		if (veiculos[i].cilindros > maior)
+			maior = veiculos[i].cilindros;
+	}
+
+	int *count = (int *)calloc(maior + 1, sizeof(int));
+
+	for (int i = 0; i < n; i++)
+		count[veiculos[i].cilindros]++;
+
+	for (int i = 1; i <= maior; i++)
+		count[i] += count[i - 1];
+
+	Veiculo *ordenados = (Veiculo *)malloc(n * sizeof(Veiculo));
+
+	for (int i = n - 1; i >= 0; i--){
+
+		int chave = veiculos[i].cilindros;
+
+		ordenados[count[chave] - 1] = veiculos[i];
+
+		count[chave]--;
+	}
+
+	for (int i = 0; i < n; i++)
+		veiculos[i] = ordenados[i];
+
+	free(ordenados);
+	free(count);
+}
+
+// MAIN ===================================================================================
+
 int main(){
 
 	int n;
 	int id;
-	
+	int qtd = 0;
+
 	Veiculo *veiculos = lerCsv("/tmp/veiculos.csv", &n);
 
+	Veiculo *selecionados = malloc(n * sizeof(Veiculo));
+
 	do{
-	
+
 		scanf("%d", &id);
 
 		if (id != -1){
-			for (int i = 0; i < n; i++){
-				if (veiculos[i].id == id){
-					char buffer[1024];
 
-					formatVeiculo(veiculos[i], buffer);
-					printf("%s\n", buffer);
+			for (int i = 0; i < n; i++){
+
+				if (veiculos[i].id == id){
+
+					selecionados[qtd] = veiculos[i];
+					qtd++;
+
 					break;
 				}
 			}
 		}
-	
+
 	} while (id != -1);
 
+	countingSort(selecionados, qtd);
+
+	for (int i = 0; i < qtd; i++){
+
+		char buffer[1024];
+
+		formatVeiculo(selecionados[i], buffer);
+
+		printf("%s\n", buffer);
+	}
+
+	free(selecionados);
 	free(veiculos);
+
+	return 0;
 }

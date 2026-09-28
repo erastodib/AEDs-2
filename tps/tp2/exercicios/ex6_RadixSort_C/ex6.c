@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <strings.h>
+
 #define DEFAULT 128
 
 // CLASSE DATA ===================================================================================
@@ -32,6 +34,7 @@ Data parseData(char *str){
 }
 
 void formatData(Data d, char *buffer){
+
 	sprintf(buffer, "%02d/%02d/%04d", d.dia, d.mes, d.ano);
 }
 
@@ -120,6 +123,7 @@ void formatVeiculo(Veiculo v, char *buffer){
 	strcpy(combustivel, v.combustivel);
 
 	for (int i = 0; combustivel[i] != '\0'; i++){
+
 		if (combustivel[i] == ';')
 			combustivel[i] = ',';
 	}
@@ -144,7 +148,8 @@ void formatVeiculo(Veiculo v, char *buffer){
 		 data
 	);
 }
-//CSV
+
+// CSV ===================================================================================
 
 Veiculo *lerCsv(char *caminhoArquivo, int *n){
 
@@ -170,7 +175,7 @@ Veiculo *lerCsv(char *caminhoArquivo, int *n){
 	while (fgets(linha, sizeof(linha), arquivo) != NULL){
 
 		if (*n == cap){
-			
+
 			cap *= 2;
 
 			array = (Veiculo *)realloc(
@@ -191,30 +196,112 @@ Veiculo *lerCsv(char *caminhoArquivo, int *n){
 	return array;
 }
 
+// RADIX SORT ===================================================================================
+
+// Counting Sort utilizado pelo Radix Sort (ordena apenas pelo dígito indicado por exp)
+
+void countingSort(Veiculo *veiculos, int n, int exp){
+
+	int count[10] = {0};
+
+	Veiculo *ordenados = (Veiculo *)malloc(n * sizeof(Veiculo));
+
+	//Conta ocorrência de cada dígito
+	for (int i = 0; i < n; i++){
+
+		int digito = (veiculos[i].ano / exp) % 10;
+
+		count[digito]++;
+	}
+
+	//Acumula as contagens
+	for (int i = 1; i < 10; i++)
+		count[i] += count[i - 1];
+
+	//Ordena pelo dígito atual (de trás para frente para ficar estavel)
+	for (int i = n - 1; i >= 0; i--){
+
+		int digito = (veiculos[i].ano / exp) % 10;
+
+		ordenados[count[digito] - 1] = veiculos[i];
+
+		count[digito]--;
+	}
+
+	// Copia de volta
+	for (int i = 0; i < n; i++)
+		veiculos[i] = ordenados[i];
+
+	free(ordenados);
+}
+
+void radixSort(Veiculo *veiculos, int n){
+
+	if (n <= 1)
+		return;
+
+	int maior = veiculos[0].ano;
+
+	for (int i = 1; i < n; i++){
+
+		if (veiculos[i].ano > maior)
+			maior = veiculos[i].ano;
+	}
+
+	// exp = 1 -> unidade
+	// exp = 10 -> dezena
+	// exp = 100 -> centena
+	// exp = 1000 -> milhar
+
+	for (int exp = 1; maior / exp > 0; exp *= 10)
+		countingSort(veiculos, n, exp);
+}
+
+// MAIN ===================================================================================
+
 int main(){
 
 	int n;
 	int id;
-	
+	int qtd = 0;
+
 	Veiculo *veiculos = lerCsv("/tmp/veiculos.csv", &n);
 
+	Veiculo *selecionados = malloc(n * sizeof(Veiculo));
+
 	do{
-	
+
 		scanf("%d", &id);
 
 		if (id != -1){
-			for (int i = 0; i < n; i++){
-				if (veiculos[i].id == id){
-					char buffer[1024];
 
-					formatVeiculo(veiculos[i], buffer);
-					printf("%s\n", buffer);
+			for (int i = 0; i < n; i++){
+
+				if (veiculos[i].id == id){
+
+					selecionados[qtd] = veiculos[i];
+					qtd++;
+
 					break;
 				}
 			}
 		}
-	
+
 	} while (id != -1);
 
+	radixSort(selecionados, qtd);
+
+	for (int i = 0; i < qtd; i++){
+
+		char buffer[1024];
+
+		formatVeiculo(selecionados[i], buffer);
+
+		printf("%s\n", buffer);
+	}
+
+	free(selecionados);
 	free(veiculos);
+
+	return 0;
 }

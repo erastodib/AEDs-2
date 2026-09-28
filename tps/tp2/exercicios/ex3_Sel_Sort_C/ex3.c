@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <strings.h>
 #define DEFAULT 128
 
 // CLASSE DATA ===================================================================================
@@ -170,7 +171,7 @@ Veiculo *lerCsv(char *caminhoArquivo, int *n){
 	while (fgets(linha, sizeof(linha), arquivo) != NULL){
 
 		if (*n == cap){
-			
+
 			cap *= 2;
 
 			array = (Veiculo *)realloc(
@@ -191,30 +192,63 @@ Veiculo *lerCsv(char *caminhoArquivo, int *n){
 	return array;
 }
 
+void selectionSort(Veiculo *veiculos, int n){
+
+	for (int i = 0; i < n - 1; i++){
+		int min = i;
+
+		for (int j = i + 1; j < n; j++){
+
+			if (strcasecmp(veiculos[j].modelo, veiculos[min].modelo) < 0)
+				min = j;
+		}
+
+		Veiculo temp = veiculos[i];
+		veiculos[i] = veiculos[min];
+		veiculos[min] = temp;
+	}
+}
+
 int main(){
 
 	int n;
 	int id;
-	
+	int qtd = 0;
+
 	Veiculo *veiculos = lerCsv("/tmp/veiculos.csv", &n);
 
+	Veiculo *selecionados = malloc(n * sizeof(Veiculo));
+
 	do{
-	
+
 		scanf("%d", &id);
 
 		if (id != -1){
-			for (int i = 0; i < n; i++){
-				if (veiculos[i].id == id){
-					char buffer[1024];
 
-					formatVeiculo(veiculos[i], buffer);
-					printf("%s\n", buffer);
+			for (int i = 0; i < n; i++){
+
+				if (veiculos[i].id == id){
+
+					selecionados[qtd] = veiculos[i];
+					qtd++;
+
 					break;
 				}
 			}
 		}
-	
+
 	} while (id != -1);
 
+	selectionSort(selecionados, qtd);
+
+	for (int i = 0; i < qtd; i++){
+
+		char buffer[1024];
+
+		formatVeiculo(selecionados[i], buffer);
+		printf("%s\n", buffer);
+	}
+
+	free(selecionados);
 	free(veiculos);
 }
