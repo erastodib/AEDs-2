@@ -186,7 +186,7 @@ public class ex4 {
         }
     }
 
-    static void insertionSort(Veiculo[] veiculos, int n) {
+    static void insertionSort(Veiculo[] veiculos, int n) { //A chave de pesquisa é o atributo 'marca'
 
         for (int i = 1; i < n; i++) {
 
