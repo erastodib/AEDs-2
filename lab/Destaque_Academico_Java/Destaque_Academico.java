@@ -1,5 +1,4 @@
 import java.util.Scanner;
-import java.util.ArrayList;
 
 class Aluno{
 	private String nome;
@@ -27,19 +26,19 @@ public class Destaque_Academico{
 
 		Scanner scanner = new Scanner(System.in);
 		
-		if (scanner.hasNextInt()){
+		while (scanner.hasNextInt()){
 
 			int n = scanner.nextInt(); //qtd alunos
 			int k = scanner.nextInt(); //k primeiros colocados
 
-            		Aluno[] arr = new Aluno[n];
+			Aluno[] arr = new Aluno[n];
 
 			for (int i = 0; i < n; i++){
             		
 				Aluno novoAluno = new Aluno();
 			        novoAluno.setNota(scanner.nextInt());
 		        	novoAluno.setFaltas(scanner.nextInt());
-	            		novoAluno.setNome(scanner.next());
+	            		novoAluno.setNome(scanner.nextLine().trim());
             
 				arr[i] = (novoAluno);
 	       		}		
@@ -68,7 +67,7 @@ public class Destaque_Academico{
 			if (
 			arr[j].getNota() > pivo.getNota() ||
 			(arr[j].getNota() == pivo.getNota() && arr[j].getFaltas() < pivo.getFaltas()) ||
-			(arr[j].getNota() == pivo.getNota() && arr[j].getFaltas() < pivo.getFaltas() && arr[j].getNome().compareTo(pivo.getNome()) < 0)
+			(arr[j].getNota() == pivo.getNota() && arr[j].getFaltas() == pivo.getFaltas() && arr[j].getNome().compareTo(pivo.getNome()) < 0)
 			){
 
 
