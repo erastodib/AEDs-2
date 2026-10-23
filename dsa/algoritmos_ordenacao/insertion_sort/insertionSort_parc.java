@@ -1,7 +1,7 @@
 public class insertionSort_parc{
 
 	public static void main(String[] args){
-		int vet[] = {8, 3, 6, 2, 5, 9};
+		int vet[] = {100, 200, 300, 400, 500, 1, 50};
 		int n = vet.length; //6
 		int k = 3; //dos 6, quero encontrar apenas os 3 menores
 

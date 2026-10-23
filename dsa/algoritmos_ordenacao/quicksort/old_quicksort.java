@@ -1,4 +1,4 @@
-public class quicksort{
+public class old_quicksort{
 
 //	QuickSort = move elementos menores à esquerda de um pivô
 //	Divide o array recursivamente em 2 partes
