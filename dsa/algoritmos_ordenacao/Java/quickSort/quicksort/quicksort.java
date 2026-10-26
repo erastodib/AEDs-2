@@ -12,19 +12,26 @@ public class quicksort{
 		System.out.println("Before:");
 		printArray(arr);
 
-		quicksort(arr, 0, arr.length - 1);
+		quicksort(arr);
 
 		System.out.println("After:");
 		printArray(arr);
 
 	}
 
+	private static void quicksort(int[] arr){
+		quicksort(arr, 0, arr.length - 1);
+	}
+
 	private static void quicksort(int[] arr, int lowIndex, int highIndex){
 		
 		if (lowIndex >= highIndex)
 			return;
-
-		int pivot = arr[highIndex];
+		
+		//int pivor = arr[highIndex];
+		int pivotIndex = new Random().nextInt(highIndex - lowIndex) + lowIndex;
+		int pivot = arr[pivotIndex];
+		swap(arr, pivotIndex, highIndex);
 
 		int lp = lowIndex;
 		int hp = highIndex;
