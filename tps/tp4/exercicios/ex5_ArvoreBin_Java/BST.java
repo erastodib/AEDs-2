@@ -160,7 +160,7 @@ public class BST{
 		if (tmp < 0)
 			n.esq = inserir(x, n.esq);
 		else if (tmp > 0)
-			n.esq = inserir(x, n.dir);
+			n.dir = inserir(x, n.dir);
 		
 		// A lógica ignora elementos duplicados, como pedido no enunciado
 
@@ -168,19 +168,26 @@ public class BST{
 	}
 
 	// PESQUISAR (ITERATIVO)	
-	public boolean pesquisar(Veiculo x){
+	public boolean pesquisar(String str){
 		No n = raiz;
+		System.out.print("raiz ");
 
 		while(n != null){
-			int tmp = comparar(x.modelo, n.veiculo.modelo);
+			int tmp = comparar(str, n.veiculo.modelo);
 
-			if (tmp == 0)
+			if (tmp == 0){
+				System.out.println("SIM");
 				return true;
-			else if (tmp < 0)
+			} else if (tmp < 0){
 				n = n.esq;
-			else 
+				System.out.print("esq ");
+			} else { 
 				n = n.dir;
+				System.out.print("dir ");
+			}
 		}
+		System.out.println("NAO");
+		return false;
 	}
 
 
@@ -198,8 +205,54 @@ public class BST{
 	private void emOrdem(No n){
 		if (n != null){
 			emOrdem(n.esq);
-			System.out.println(n.veiculo.modelo);
+			System.out.println(n.veiculo.format());
 			emOrdem(n.dir);
 		}
 	}
+
+	// ---------------------------------------------------------------------------------------
+	// MAIN
+	
+
+	public static void main(String[] args){
+
+		LeitorCSV leitor = new LeitorCSV();
+		Veiculo[] veiculos = leitor.lerCSV("/tmp/veiculos.csv");
+
+
+		// Instanciar e popular árvore de acordo com a entrada de pub.in
+		BST arvore = new BST();
+
+		Scanner scanner = new Scanner(System.in);
+
+		int id;
+
+		do {
+			id = scanner.nextInt();
+
+			if (id != -1){
+				for (int i = 0; i < veiculos.length; i++){
+					if (veiculos[i] != null && veiculos[i].getId() == id){
+						arvore.inserir(veiculos[i]);
+						break;
+					}
+				}
+			}
+		} while (id != -1);
+
+		scanner.nextLine(); // Limpar buffer do scanner
+
+		// Pesquisar na árvore de acordo com a entrada de pub.in
+
+		String modelo;
+		while (!(modelo = scanner.nextLine()).equals("FIM"))
+			arvore.pesquisar(modelo);
+
+		// Imprime os itens da árvore por caminhamento em ordem
+		arvore.emOrdem();
+
+		scanner.close();
+			
+	}
+}
 
